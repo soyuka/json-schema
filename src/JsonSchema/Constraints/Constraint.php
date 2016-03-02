@@ -10,6 +10,7 @@
 namespace JsonSchema\Constraints;
 
 use JsonSchema\Uri\UriRetriever;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 /**
  * The Base Constraints, all Validators should extend this class
@@ -42,6 +43,7 @@ abstract class Constraint implements ConstraintInterface
         $this->checkMode    = $checkMode;
         $this->uriRetriever = $uriRetriever;
         $this->factory = $factory;
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
