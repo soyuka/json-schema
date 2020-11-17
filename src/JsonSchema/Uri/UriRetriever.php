@@ -15,6 +15,7 @@ use JsonSchema\Validator;
 use JsonSchema\Exception\InvalidSchemaMediaTypeException;
 use JsonSchema\Exception\JsonDecodingException;
 use JsonSchema\Exception\ResourceNotFoundException;
+use JsonSchema\Uri\Retrievers\Curl;
 
 /**
  * Retrieves JSON Schema URIs
@@ -73,7 +74,7 @@ class UriRetriever
     public function getUriRetriever()
     {
         if (is_null($this->uriRetriever)) {
-            $this->setUriRetriever(new FileGetContents);
+            $this->setUriRetriever(\extension_loaded('curl') ? new Curl : new FileGetContents);
         }
 
         return $this->uriRetriever;
