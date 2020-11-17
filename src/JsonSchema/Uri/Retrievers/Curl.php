@@ -18,13 +18,16 @@ use JsonSchema\Validator;
  */
 class Curl extends AbstractRetriever
 {
+    private $decorated;
     protected $messageBody;
 
-    public function __construct()
+    public function __construct(UriRetrieverInterface $decorated = null)
     {
         if (!function_exists('curl_init')) {
             throw new \RuntimeException("cURL not installed");
         }
+
+        $this->decorated = $decorated;
     }
 
     /**
@@ -33,6 +36,11 @@ class Curl extends AbstractRetriever
      */
     public function retrieve($uri)
     {
+        $scheme = parse_url($uri, PHP_URL_SCHEME);
+        if (!$scheme) {
+            return $this->decorated->retrieve($uri);
+        }
+
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $uri);
